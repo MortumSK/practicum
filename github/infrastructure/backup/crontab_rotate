@@ -1,3 +1,0 @@
-#Почему-то не работает через ls, поэтому пришлось через find
-#5 */3 * * * /usr/bin/ls -lt /opt/backup/ | /usr/bin/tail -zn +31 | /usr/bin/xargs rm -rf
-5 */3 * * * /usr/bin/find /opt/backup/ -mindepth 1 -type d -print | /usr/bin/sort | /usr/bin/head -n-30 | /usr/bin/xargs rm -rf

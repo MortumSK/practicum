@@ -1,8 +1,0 @@
-#cloud-config
-users:
-  - name: ansible
-    shell: /bin/bash
-    home: /home/ansible
-    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    ssh_authorized_keys:
-      - ssh-rsa AAAAB.......= student@fhmsf16j25st24mhn91p
