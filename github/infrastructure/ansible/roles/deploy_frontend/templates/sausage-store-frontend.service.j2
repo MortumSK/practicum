@@ -1,0 +1,16 @@
+Description=Sausage store frontend service
+After=network.target
+
+[Service]
+WorkingDirectory=/var/www-data/frontend
+ExecStart=/usr/local/bin/http-server . -p 8000 --proxy http://localhost:8080
+
+User=www-data
+Type=simple
+Restart=always
+RestartSec=10
+
+StandardOutput=append:/tmp/out-front.log
+
+[Install]
+WantedBy=multi-user.target

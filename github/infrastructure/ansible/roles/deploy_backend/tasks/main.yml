@@ -1,0 +1,54 @@
+---
+# установка пакета openjdk-16-jdk
+# создание сервисного пользователя
+# скачивание артефактов бэкенда из Nexus
+# создание systemd-юнита для сервиса
+# запуск бэкенда
+- name: install openjdk-16-jdk
+  apt:
+    name: 
+      - openjdk-16-jdk
+      - python3-lxml
+    state: present
+  become: yes
+
+- name: add jarservice user
+  user:
+    name: "jarservice"
+    create_home: no
+    shell: /sbin/nologin
+  become: yes
+
+- name: create a directory /var/jarservice
+  file:
+    path: /var/jarservice
+    state: directory
+    mode: 0755
+    owner: jarservice
+  become: yes
+
+- name: download backend
+  maven_artifact:
+    dest: /var/jarservice
+    repository_url: "https://nexus.praktikum-services.ru/repository/sausage-store-kim-sergey-backend"
+    group_id: "com.yandex.practicum.devops"
+    username: s.kim
+    password: "{{ nexus_pass }}"
+    artifact_id: "sausage-store"
+    version: "1.0.157718"
+    mode: 0755
+  become: yes
+
+- name: backend unit file
+  template:
+    src: sausage-store-backend.service.j2
+    dest: /etc/systemd/system/sausage-store-backend.service
+  become: yes
+
+- name: configure systemd
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
+    name: sausage-store-backend
+  become: yes
